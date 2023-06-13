@@ -19,10 +19,14 @@ import java.util.Objects;
 public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @jakarta.persistence.Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column
+    @OneToOne
+    @JoinColumn(name = "passport_data_id")
+    private PassportData passportData;
+
+    @Column(nullable = false)
     private LocalDate arrivalDate;
 
     @Column
