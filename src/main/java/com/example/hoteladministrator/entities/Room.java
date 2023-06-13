@@ -24,11 +24,11 @@ public class Room {
     @Column
     int capacity;
 
-    @OneToMany(mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<Guest> guests = new LinkedHashSet<>();
-
     @Enumerated
     @Column(name = "room_class", nullable = false)
     private RoomClass roomClass;
+
+    @OneToMany(mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<Guest> guests = new LinkedHashSet<>();
 
 }

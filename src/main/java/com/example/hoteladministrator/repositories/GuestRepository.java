@@ -18,8 +18,10 @@ public interface GuestRepository extends JpaRepository<Guest,Long> {
     Optional<Guest> findById(Long id);
 
     Optional<Guest> findGuestByArrivalDate(LocalDate arrivalDate);
-    Optional<Guest>findGuestByDepartureDate(LocalDate departureDate);
-    Optional<Guest>findGuestByArrivalDateAndDepartureDate(LocalDate arrivalDate, LocalDate departureDate);
+    Optional<Guest> findGuestByDepartureDate(LocalDate departureDate);
+    Optional<Guest> findGuestByArrivalDateAndDepartureDate(LocalDate arrivalDate, LocalDate departureDate);
+    Optional<Guest> findGuestByPassportData_FullName(String passportData_fullName);
+    Optional <Guest> findGuestByPassportData_DateOfBirth(LocalDate passportData_dateOfBirth);
     @Override
     <S extends Guest> S save(S entity);
 
