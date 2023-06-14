@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table
 public class Guest {
@@ -22,14 +21,22 @@ public class Guest {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "passport_data_id")
-    private PassportData passportData;
+    @Column(name = "name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "phone_number", nullable = false, length = 24)
+    private String phoneNumber;
 
     @Column(nullable = false)
     private LocalDate arrivalDate;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate departureDate;
 
     @ManyToOne(optional = false)
