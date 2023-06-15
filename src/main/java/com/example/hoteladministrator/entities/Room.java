@@ -24,11 +24,14 @@ public class Room {
     @Column
     int capacity;
 
-    @Enumerated
-    @Column(name = "room_class", nullable = false)
-    private RoomClass roomClass;
+    @OneToOne(optional = false, orphanRemoval = true)
+    @JoinColumn(name = "room_type_id", nullable = false)
+    private RoomType roomType;
 
     @OneToMany(mappedBy = "room", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<Guest> guests = new LinkedHashSet<>();
 
+    public boolean isEmpty(){
+        return guests.isEmpty();
+    };
 }
