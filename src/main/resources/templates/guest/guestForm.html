@@ -9,39 +9,39 @@
 <body>
 <div class="container">
     <h1>Add Guest</h1>
-    <!-- Use Thymeleaf to create form with action and method attributes -->
     <form th:action="@{/guests/add}" method="post">
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName">
+            <input type="text" class="form-control" id="firstName" name="firstName" th:value="${guest.firstName}">
         </div>
         <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName">
+            <input type="text" class="form-control" id="lastName" name="lastName" th:value="${guest.lastName}">
         </div>
         <div class="mb-3">
             <label for="dateOfBirth" class="form-label">Date of Birth</label>
-            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" th:value="${guest.dateOfBirth}">
         </div>
         <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" th:value="${guest.phoneNumber}">
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="arrivalDate" class="form-label">Arrival Date</label>
-                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate">
+                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" th:value="${guest.arrivalDate}">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="departureDate" class="form-label">Departure Date</label>
-                    <input type="date" class="form-control" id="departureDate" name="departureDate">
+                    <input type="date" class="form-control" id="departureDate" name="departureDate" th:value="${guest.departureDate}">
                 </div>
             </div>
         </div>
-        <button type="<EUGPSCoordinates>submit" class="<EUGPSCoordinates>btn btn-primary">Add Guest</button>
+        <input type="hidden" name="roomId" th:value="${roomId}" />
+        <button type="submit" class="btn btn-primary">Add Guest</button>
     </form>
 </div>
 

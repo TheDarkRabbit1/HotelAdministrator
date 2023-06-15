@@ -24,7 +24,7 @@
             for (var i = 0; i < filteredRooms.length; i++) {
                 var room = filteredRooms[i];
                 var row = document.createElement("tr");
-                row.innerHTML = "<td>" + room.id + "</td><td>" + room.capacity + "</td><td>" + room.roomClass + "</td><td><button onclick='window.location.href=\"/rooms/roomInfo/" + room.id + "\"' class='btn btn-primary'>Edit</button></td>";
+                row.innerHTML = "<td>" + room.id + "</td><td>" + room.capacity + "</td><td>" + room.roomClass + "</td><td><button onclick='window.location.href=\"/rooms/roomInfo?" + room.id + "\"' class='btn btn-primary'>Edit</button></td>";
                 tableBody.appendChild(row);
             }
         }
@@ -61,7 +61,7 @@
             <td th:text="${room.id}"></td>
             <td th:text="${room.capacity}"></td>
             <td th:text="${room.roomClass}"></td>
-            <td><button th:onclick="'window.location.href=\'/rooms/roomInfo/' + ${room.id} + '\''" class="btn btn-primary">Edit</button></td>
+            <td><button th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + ${room.id} + '\''" class="btn btn-primary">Edit</button></td>
         </tr>
         </tbody>
     </table>

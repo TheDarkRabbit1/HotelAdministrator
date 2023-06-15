@@ -87,24 +87,34 @@
     <div class="guests-container">
         <div th:if="${guests.size() > 0}">
             <div th:each="guest : ${guests}">
-                <div class="rectangle">
-                    <a th:href="@{/guests/guestInfo/{id}(id=${guest.id})}" th:text="${guest.getFirstName() + ' ' + guest.getLastName()}"></a>
+                <div class="rectangle" th:onclick="'redirectToGuestInfo('+${guest.id}+')'">
+                    <span th:text="${guest.getFirstName() + ' ' + guest.getLastName()}"></span>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <div class="guests-container">
+    <div class="new-guests-container">
         <div th:if="${guests.size() < room.capacity}">
-            <div class="rectangle-green">
-                <a href="/guests/guestForm">+</a>
+            <div class="rectangle-green" th:onclick="'redirectToGuestForm(' + ${room.id} + ')'">
+                <a>+</a>
             </div>
         </div>
     </div>
     <div class="apply-button">
-        <button class="btn btn-primary">Apply</button>
+        <button class="btn btn-primary" th:onclick="'window.location.href=\'/rooms'">Apply</button>
     </div>
 </div>
+
+<script>
+    function redirectToGuestInfo(guestId) {
+        window.location.href = '/guests/guestInfo?guestId=' + guestId;
+    }
+    function redirectToGuestForm(roomId) {
+        window.location.href = '/guests/guestForm?roomId=' + roomId;
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2"></script>
 <script src="https://unpkg.com/@popperjs/core@2"></script>

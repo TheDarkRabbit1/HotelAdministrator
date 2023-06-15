@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guest Information</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>Guest Information</h1>
+  <p><strong>Name:</strong> <span th:text="${guest.firstName}"></span> <span th:text="${guest.lastName}"></span></p>
+  <p><strong>Date of Birth:</strong> <span th:text="${guest.dateOfBirth}"></span></p>
+  <p><strong>Phone Number:</strong> <span th:text="${guest.phoneNumber}"></span></p>
+  <p><strong>Booked Room:</strong> <a class="btn btn-primary" th:href="@{'/rooms/roomInfo?roomId=' + ${guest.room.id}}"><span th:text="${guest.room.id}"></span></a></p>
+  <p><strong>Arrival Date:</strong> <span th:text="${guest.arrivalDate}"></span></p>
+  <p><strong>Departure Date:</strong> <span th:text="${guest.departureDate}"></span></p>
+  <a class="btn btn-primary" th:href="@{'/guests/guestForm?roomId=' + ${guest.room.id} + '&guestId=' + ${guest.id}}">Edit Guest</a>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
