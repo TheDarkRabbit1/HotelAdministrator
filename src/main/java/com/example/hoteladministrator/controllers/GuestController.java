@@ -2,6 +2,10 @@ package com.example.hoteladministrator.controllers;
 
 import com.example.hoteladministrator.entities.Guest;
 import com.example.hoteladministrator.entities.Room;
+import com.example.hoteladministrator.repositories.RoomRepository;
+import com.example.hoteladministrator.services.GuestService;
+import com.example.hoteladministrator.services.RoomService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,28 +17,14 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/guests")
+@AllArgsConstructor
 public class GuestController {
+    private final GuestService guestService;
+    private final RoomService roomService;
+
     @GetMapping
     public String guestList(Model model){
-        Room room = new Room();
-        room.setId(2L);
-
-
-        Guest guest = new Guest();
-        guest.setId(1L);
-        guest.setFirstName("John");
-        guest.setLastName("Doe");
-        guest.setRoom(room);
-
-        Guest guest1 = new Guest();
-        guest1.setId(2L);
-        guest1.setFirstName("Hor");
-        guest1.setLastName("Lee");
-        guest1.setRoom(room);
-        List<Guest> guests = new ArrayList<>();
-        guests.add(guest);
-        guests.add(guest1);
-
+        List<Guest> guests = guestService.getGuestList();
         model.addAttribute("guests",guests);
         return "guest/guests";
     }
@@ -43,17 +33,10 @@ public class GuestController {
                             @RequestParam("roomId") long roomId,
                             @RequestParam(value = "guestId", required = false) Optional<Long> guestId){
         if (guestId.isPresent()){
-            Guest guest = new Guest();
-            guest.setId(1L);
-            guest.setFirstName("John");
-            guest.setLastName("Doe");
-            guest.setPhoneNumber("+3413141431");
-            guest.setDateOfBirth(LocalDate.now());
-            guest.setArrivalDate(LocalDate.now());
-            guest.setDepartureDate(LocalDate.now());
+            Guest guest = guestService.getGuestById(guestId.get());
             model.addAttribute("guest",guest);
         }else{
-            model.addAttribute("guest", new Guest());
+            model.addAttribute("guest", new Guest());//todo:try removing
         }
         model.addAttribute("roomId", roomId);
         return "guest/guestForm";
@@ -73,25 +56,15 @@ public class GuestController {
         guest.setPhoneNumber(phoneNumber);
         guest.setArrivalDate(LocalDate.parse(arrivalDate));
         guest.setDepartureDate(LocalDate.parse(departureDate));
-        guest.setRoom(new Room());
-        System.out.println("GUEST ADDED:" +guest);
-        System.out.println("ROOMID TO ADD HIM:"+roomId);
+        guest.setRoom(roomService.getRoomById(roomId));
+        if (guestService.addGuest(guest)==null){
+            //todo: validate input
+        }
         return "redirect:/rooms/roomInfo?roomId=" + roomId;
     }
     @GetMapping("/guestInfo")
     public String getGuest(Model model, @RequestParam("guestId") long id){
-        Guest guest = new Guest();
-        guest.setId(id);
-        guest.setFirstName("John");
-        guest.setLastName("Doe");
-        guest.setPhoneNumber("+3984267896");
-        guest.setDateOfBirth(LocalDate.now());
-        guest.setArrivalDate(LocalDate.now());
-        guest.setDepartureDate(LocalDate.now());
-
-        Room room = new Room();
-        room.setId(2L);
-        guest.setRoom(room);
+        Guest guest = guestService.getGuestById(id);
         model.addAttribute("guest",guest);
         return "guest/guestInfo";
     }

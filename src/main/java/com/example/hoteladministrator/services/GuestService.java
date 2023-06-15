@@ -21,8 +21,8 @@ public class GuestService {
     public List<Guest> getGuestList(){
         return guestRepository.findAll();
     }
-     public void addGuest(Guest guest){
-        guestRepository.save(guest);
+     public Guest addGuest(Guest guest){
+        return guestRepository.save(guest);
      }
      public void deleteGuest(Guest guest){
         guestRepository.delete(guest);
