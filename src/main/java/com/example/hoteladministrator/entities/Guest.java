@@ -43,6 +43,19 @@ public class Guest {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", arrivalDate=" + arrivalDate +
+                ", departureDate=" + departureDate +
+                ", room=" + room +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -24,8 +25,8 @@ public class RoomController {
         model.addAttribute("rooms", rooms);
         return "room/rooms";
     }
-    @GetMapping("/roomInfo/{id}")
-    public String getRoomInfo(@PathVariable("id") long roomId, Model model) {
+    @GetMapping("/roomInfo")
+    public String getRoomInfo(@RequestParam("roomId") long roomId, Model model) {
         Room room = new Room(roomId, 3, RoomClass.DELUXE, new LinkedHashSet<>());
         List<Guest> guests = new ArrayList<>();
 
