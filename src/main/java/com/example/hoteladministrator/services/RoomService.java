@@ -27,8 +27,8 @@ public class RoomService {
     public List<Room> getRoomList(){
         return roomRepository.findAll();
     }
-    public Room addRoom(Room room, String roomTypeName){
-        Optional<RoomType> roomType = roomTypeRepository.findRoomTypeByTypeName(roomTypeName);
+    public Room addRoom(Room room, long roomTypeId){
+        Optional<RoomType> roomType = roomTypeRepository.findById(roomTypeId);
         if (roomType.isEmpty())
             throw new RuntimeException("No such Room Type");
         room.setRoomType(roomType.get());

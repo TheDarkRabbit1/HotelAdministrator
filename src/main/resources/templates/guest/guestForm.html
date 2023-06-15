@@ -10,6 +10,7 @@
 <div class="container">
     <h1>Add Guest</h1>
     <form th:action="@{/guests/add}" method="post">
+        <input type="hidden" name="id" th:value="${guest.id}" />
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input type="text" class="form-control" id="firstName" name="firstName" th:value="${guest.firstName}">

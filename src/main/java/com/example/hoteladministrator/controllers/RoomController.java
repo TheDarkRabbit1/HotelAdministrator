@@ -7,10 +7,7 @@ import com.example.hoteladministrator.services.RoomService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,15 +34,13 @@ public class RoomController {
     @GetMapping("/roomForm")
     public String roomForm(Model model){
         List<RoomType> roomTypeList = roomService.getRoomTypes();
+        model.addAttribute("room", new Room());
         model.addAttribute("roomTypeNames",roomTypeList);
         return "room/roomForm";
     }
     @PostMapping("/add")
-    public String guestAdd(@RequestParam int capacity,
-                           @RequestParam String roomTypeName) {
-        Room room = new Room();
-        room.setCapacity(capacity);
-        roomService.addRoom(room, roomTypeName);
+    public String guestAdd(@ModelAttribute Room room, @RequestParam("roomTypeId") long roomTypeId) {
+        roomService.addRoom(room, roomTypeId);
         return "redirect:/rooms";
     }
 }

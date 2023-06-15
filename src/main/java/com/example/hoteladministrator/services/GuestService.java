@@ -21,13 +21,24 @@ public class GuestService {
     public List<Guest> getGuestList(){
         return guestRepository.findAll();
     }
+    public void deleteGuest(Guest guest){
+        guestRepository.delete(guest);
+    }
+    public void deleteGuestById(long id){
+        guestRepository.deleteById(id);
+    }
      public Guest addGuest(Guest guest){
         return guestRepository.save(guest);
      }
-     public void deleteGuest(Guest guest){
-        guestRepository.delete(guest);
-     }
-     public void deleteGuestById(long id){
-        guestRepository.deleteById(id);
-     }
+
+    public void updateGuest(Guest guest) {
+        guestRepository.updateGuest(guest.getFirstName(),
+                guest.getLastName(),
+                guest.getPhoneNumber(),
+                guest.getDateOfBirth(),
+                guest.getArrivalDate(),
+                guest.getDepartureDate(),
+                guest.getId());
+    }
+
 }

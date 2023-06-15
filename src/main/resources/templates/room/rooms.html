@@ -60,7 +60,7 @@
         <tr th:each="room : ${rooms}">
             <td th:text="${room.id}"></td>
             <td th:text="${room.capacity}"></td>
-            <td th:text="${room.roomClass}"></td>
+            <td th:text="${room.roomType.typeName}"></td>
             <td><button th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + ${room.id} + '\''" class="btn btn-primary">Edit</button></td>
         </tr>
         </tbody>
