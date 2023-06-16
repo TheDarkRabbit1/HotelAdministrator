@@ -75,4 +75,10 @@ public class GuestController {
         model.addAttribute("guest", guest);
         return "guest/guestInfo";
     }
+    @PostMapping("/delete")
+    public String deleteGuest(@RequestParam("guestId") Long guestId) {
+        guestService.deleteGuestById(guestId);
+        return "redirect:/rooms";
+    }
+
 }

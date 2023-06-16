@@ -54,5 +54,11 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
+    @PostMapping("/delete")
+    public String deleteRoom(@RequestParam("roomId") Long roomId) {
+        roomService.deleteRoomById(roomId);
+        return "redirect:/rooms";
+    }
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.hoteladministrator.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
@@ -50,8 +51,9 @@ public class Guest {
     @Column(nullable = false)
     private LocalDate departureDate;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "room_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    @JsonBackReference
     private Room room;
 
     @Override

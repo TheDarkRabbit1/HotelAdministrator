@@ -68,7 +68,7 @@
         <input type="hidden" name="roomId" th:value="${roomId}" />
         <div class="d-flex">
             <button type="submit" class="btn btn-primary me-2">Add Guest</button>
-            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/rooms/' + ${roomId} + '\''">Back to Room</button>
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + ${roomId} + '\''">Back to Room</button>
         </div>
     </form>
 </div>
