@@ -1,6 +1,9 @@
 package com.example.hoteladministrator.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,17 +24,20 @@ public class Room {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Min(1)
+    @Max(6)
+    @NotEmpty(message = "Capacity is required")
     @Column
-    int capacity;
+    private Integer capacity;
 
-    @OneToOne(optional = false, orphanRemoval = true)
+    @ManyToOne(optional = false) // Updated annotation
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Guest> guests = new LinkedHashSet<>();
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return guests.isEmpty();
-    };
+    }
 }
