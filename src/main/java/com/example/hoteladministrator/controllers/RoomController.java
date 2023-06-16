@@ -4,9 +4,11 @@ import com.example.hoteladministrator.entities.Guest;
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
 import com.example.hoteladministrator.services.RoomService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -32,16 +34,25 @@ public class RoomController {
         return "room/roomInfo";
     }
     @GetMapping("/roomForm")
-    public String roomForm(Model model){
-        List<RoomType> roomTypeList = roomService.getRoomTypes();
+    public String showRoomForm(Model model) {
+        List<RoomType> roomTypes = roomService.getRoomTypes();
+        model.addAttribute("roomTypes", roomTypes);
         model.addAttribute("room", new Room());
-        model.addAttribute("roomTypeNames",roomTypeList);
         return "room/roomForm";
     }
+
     @PostMapping("/add")
-    public String guestAdd(@ModelAttribute Room room, @RequestParam("roomTypeId") long roomTypeId) {
+    public String addRoom(@ModelAttribute("room") @Valid Room room, BindingResult bindingResult,
+                          @RequestParam("roomTypeId") long roomTypeId, Model model) {
+        if (bindingResult.hasErrors()) {
+            List<RoomType> roomTypes = roomService.getRoomTypes();
+            model.addAttribute("roomTypes", roomTypes);
+            return "room/roomForm";
+        }
+
         roomService.addRoom(room, roomTypeId);
         return "redirect:/rooms";
     }
+
 }
 

@@ -25,8 +25,7 @@ public class Room {
     private Long id;
 
     @Min(1)
-    @Max(6)
-    @NotEmpty(message = "Capacity is required")
+    @Max(5)
     @Column
     private Integer capacity;
 
