@@ -3,9 +3,12 @@ package com.example.hoteladministrator.controllers;
 import com.example.hoteladministrator.entities.Guest;
 import com.example.hoteladministrator.services.GuestService;
 import com.example.hoteladministrator.services.RoomService;
+import com.example.hoteladministrator.validators.GuestFormValidator;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class GuestController {
     private final GuestService guestService;
     private final RoomService roomService;
+    private final GuestFormValidator guestValidator;
 
     @GetMapping
     public String guestList(Model model) {
@@ -41,8 +45,13 @@ public class GuestController {
     }
 
     @PostMapping("/add")
-    public String guestAdd(@ModelAttribute Guest guest, @RequestParam Long roomId) {
-        System.out.println("GUEST FUCKERNEIURNAEIONFOIAEUNFOIUAENFAUEIFNEIUNFIUSENFU:"+guest.getId());
+    public String guestAdd(@ModelAttribute("guest") @Valid Guest guest, BindingResult result, Model model,
+                           @RequestParam Long roomId) {
+        guestValidator.validate(guest, result);
+        if (result.hasErrors()){
+            model.addAttribute("roomId", roomId);
+            return "guest/guestForm";
+        }
         if (guest.getId() == null) {
             guest.setRoom(roomService.getRoomById(roomId));
             guestService.addGuest(guest);

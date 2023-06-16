@@ -9,40 +9,67 @@
 <body>
 <div class="container">
     <h1>Add Guest</h1>
-    <form th:action="@{/guests/add}" method="post">
+    <form th:action="@{/guests/add}" th:object="${guest}" method="post">
         <input type="hidden" name="id" th:value="${guest.id}" />
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" th:value="${guest.firstName}">
+            <input type="text" class="form-control" id="firstName" name="firstName"
+                   th:field="*{firstName}" th:classappend="${#fields.hasErrors('firstName')}? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                First name is required.
+            </div>
         </div>
         <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" th:value="${guest.lastName}">
+            <input type="text" class="form-control" id="lastName" name="lastName"
+                   th:field="*{lastName}" th:classappend="${#fields.hasErrors('lastName')}? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                Last name is required.
+            </div>
         </div>
         <div class="mb-3">
             <label for="dateOfBirth" class="form-label">Date of Birth</label>
-            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" th:value="${guest.dateOfBirth}">
+            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                   th:field="*{dateOfBirth}" th:classappend="${#fields.hasErrors('dateOfBirth')}? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">
+                Date of birth is required and must be in the past.
+            </div>
         </div>
         <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" th:value="${guest.phoneNumber}">
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
+                   th:field="*{phoneNumber}" th:classappend="${#fields.hasErrors('phoneNumber')}? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">
+                Phone number is required and must be between 10 and 15 characters.
+            </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="arrivalDate" class="form-label">Arrival Date</label>
-                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" th:value="${guest.arrivalDate}">
+                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate"
+                           th:field="*{arrivalDate}" th:classappend="${#fields.hasErrors('arrivalDate')}? 'is-invalid'">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('arrivalDate')}" th:errors="*{arrivalDate}">
+                        Arrival date is required.
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="departureDate" class="form-label">Departure Date</label>
-                    <input type="date" class="form-control" id="departureDate" name="departureDate" th:value="${guest.departureDate}">
+                    <input type="date" class="form-control" id="departureDate" name="departureDate"
+                           th:field="*{departureDate}" th:classappend="${#fields.hasErrors('departureDate')}? 'is-invalid'">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('departureDate')}" th:errors="*{departureDate}">
+                        Departure date is required.
+                    </div>
                 </div>
             </div>
         </div>
         <input type="hidden" name="roomId" th:value="${roomId}" />
-        <button type="submit" class="btn btn-primary">Add Guest</button>
+        <div class="d-flex">
+            <button type="submit" class="btn btn-primary me-2">Add Guest</button>
+            <button type="button" class="btn btn-secondary" th:onclick="'window.location.href=\'/rooms/' + ${roomId} + '\''">Back to Room</button>
+        </div>
     </form>
 </div>
 
