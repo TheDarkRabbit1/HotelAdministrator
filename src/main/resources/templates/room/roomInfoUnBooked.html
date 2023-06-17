@@ -50,9 +50,17 @@
     </div>
     <div class="row mt-3">
         <div class="col-12 text-center">
-            <button class="btn btn-primary" onclick="window.location.href='/rooms'">Apply</button>
+            <div class="d-flex justify-content-center">
+                <form action="/rooms/bookRoom" method="post" class="me-2">
+                    <input type="hidden" name="roomId" th:value="${room.id}">
+                    <button class="btn btn-success" type="submit">Book Room</button>
+                </form>
+                <button class="btn btn-primary" onclick="window.location.href='/rooms'">Go Back to Room List</button>
+            </div>
         </div>
     </div>
+
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2"></script>

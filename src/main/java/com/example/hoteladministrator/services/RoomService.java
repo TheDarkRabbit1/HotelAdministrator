@@ -1,6 +1,5 @@
 package com.example.hoteladministrator.services;
 
-import com.example.hoteladministrator.entities.PayCheck;
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
 import com.example.hoteladministrator.repositories.PayCheckRepository;
@@ -53,5 +52,13 @@ public class RoomService {
             throw new RuntimeException("No such Room Type");
         }
         return roomType.get();
+    }
+
+    public void bookRoomById(long roomId) {
+        roomRepository.setIsBooked(true,roomId);
+    }
+
+    public void extendBooking(int days) {
+        //todo: implement
     }
 }

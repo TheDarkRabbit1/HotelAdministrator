@@ -1,6 +1,5 @@
 package com.example.hoteladministrator.controllers;
 
-import com.example.hoteladministrator.entities.Guest;
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
 import com.example.hoteladministrator.services.RoomService;
@@ -11,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/rooms")
@@ -29,16 +26,35 @@ public class RoomController {
     @GetMapping("/roomInfo")
     public String getRoomInfo(@RequestParam("roomId") long roomId, Model model) {
         Room room = roomService.getRoomById(roomId);
-        model.addAttribute("room", room);
-        model.addAttribute("guests", room.getGuests());
-        return "room/roomInfo";
+
+        if (room.getIsBooked()){
+            model.addAttribute("room", room);
+            model.addAttribute("guests", room.getGuests());
+            return "room/roomInfoBooked";
+        }else {
+            model.addAttribute("room", room);
+            model.addAttribute("guests", room.getGuests());
+            return "room/roomInfoUnBooked";
+        }
     }
+    @PostMapping("/bookRoom")
+    public String bookRoom(@RequestParam("roomId") long roomId){
+        //todo: implement check creation
+        roomService.bookRoomById(roomId);
+        return "redirect:/rooms/roomInfo?roomId="+roomId;
+    }
+
     @GetMapping("/roomForm")
     public String showRoomForm(Model model) {
         List<RoomType> roomTypes = roomService.getRoomTypes();
         model.addAttribute("roomTypes", roomTypes);
         model.addAttribute("room", new Room());
         return "room/roomForm";
+    }
+    @GetMapping("/extendBooking")
+    public String extendRoomBooking(@RequestParam("roomId") long roomId, @RequestParam int days){
+        roomService.extendBooking(days);
+        return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
 
     @PostMapping("/add")
@@ -54,7 +70,7 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     public String deleteRoom(@RequestParam("roomId") Long roomId) {
         roomService.deleteRoomById(roomId);
         return "redirect:/rooms";
