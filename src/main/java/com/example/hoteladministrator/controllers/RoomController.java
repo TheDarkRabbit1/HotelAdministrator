@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomController {
     private final RoomService roomService;
+    //todo: should be some but with guest and paychecks, not sure
     @GetMapping
     public String showRooms(Model model) {
         List<Room> rooms = roomService.getRoomList();
@@ -39,7 +40,7 @@ public class RoomController {
     }
     @PostMapping("/bookRoom")
     public String bookRoom(@RequestParam("roomId") long roomId){
-        //todo: implement check creation
+        roomService.createPayCheck(roomId);
         roomService.bookRoomById(roomId);
         return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
@@ -53,7 +54,7 @@ public class RoomController {
     }
     @GetMapping("/extendBooking")
     public String extendRoomBooking(@RequestParam("roomId") long roomId, @RequestParam int days){
-        roomService.extendBooking(days);
+        roomService.extendBooking(roomId, days);
         return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
 
@@ -65,7 +66,6 @@ public class RoomController {
             model.addAttribute("roomTypes", roomTypes);
             return "room/roomForm";
         }
-
         roomService.addRoom(room, roomTypeId);
         return "redirect:/rooms";
     }
