@@ -1,152 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Info</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <style>
-        .main-div {
-            background-color: #f2f2f2;
-            color: #000;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .room-info {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
-
-        .guests-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .rectangle {
-            border: 2px solid black;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px;
-            width: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .rectangle-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .delete-button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-        }
-
-        .rectangle a {
-            color: black;
-            text-decoration: none;
-            max-width: 100%; /* Allow text to scale proportionally */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .rectangle-green {
-            border: 2px solid green;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 10px;
-            width: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .rectangle-green a {
-            color: green;
-            text-decoration: none;
-        }
-
-        .apply-button {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: auto;
-        }
-    </style>
 </head>
 <body>
-<div class="main-div">
-    <div class="room-info">
-        <h1>Room #<span th:text="${room.id}"></span></h1>
-        <h3>Guests: <span th:text="${guests.size}"></span>/<span th:text="${room.capacity}"></span></h3>
-        <form class="delete-form" th:action="'/rooms/delete'" method="post">
-            <input type="hidden" name="roomId" th:value="${room.id}">
-            <button class="btn btn-danger" type="button">Delete Room</button>
-        </form>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-4">
+                <h1>Room #<span th:text="${room.id}"></span></h1>
+                <h3>Guests: <span th:text="${guests.size}"></span>/<span th:text="${room.capacity}"></span></h3>
+            </div>
+            <div class="mb-3 text-center">
+                <form class="delete-form d-inline-block" action="/rooms/delete" method="post">
+                    <input type="hidden" name="roomId" th:value="${room.id}">
+                    <button class="btn btn-danger" type="submit">Delete Room</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="guests-container">
-        <div th:if="${guests.size() > 0}">
-            <div th:each="guest : ${guests}">
-                <div class="rectangle" th:onclick="'redirectToGuestInfo('+${guest.id}+')'">
-                    <div class="rectangle-content">
-                        <span th:text="${guest.getFirstName() + ' ' + guest.getLastName()}"></span>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-center flex-column align-items-center">
+                <div th:if="${guests.size() > 0}">
+                    <div th:each="guest : ${guests}">
+                        <div class="card m-2" style="width: 18rem;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${guest.getFirstName() + ' ' + guest.getLastName()}"></h5>
+                                <form class="delete-form" action="/guests/delete" method="post">
+                                    <input type="hidden" name="guestId" th:value="${guest.id}">
+                                    <button class="btn btn-danger mt-3" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <form class="delete-form" th:action="'/guests/delete'" method="post">
-                        <input type="hidden" name="guestId" th:value="${guest.id}">
-                        <button class="btn btn-danger delete-button" type="button">Delete</button>
-                    </form>
                 </div>
-
+                <div th:if="${guests.size() < room.capacity}">
+                    <div class="card m-2" style="width: 18rem;">
+                        <div class="card-body text-center">
+                            <a class="btn btn-success" th:href="'/guests/guestForm?roomId=' + ${room.id}">+</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="new-guests-container">
-        <div th:if="${guests.size() < room.capacity}">
-            <div class="rectangle-green" th:onclick="'redirectToGuestForm(' + ${room.id} + ')'">
-                <a>+</a>
-            </div>
+    <div class="row mt-3">
+        <div class="col-12 text-center">
+            <button class="btn btn-primary" onclick="window.location.href='/rooms'">Apply</button>
         </div>
     </div>
-    <div class="apply-button">
-        <button class="btn btn-primary" th:onclick="'window.location.href=\'/rooms'">Apply</button>
-    </div>
-
 </div>
-
-<script>
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', event => {
-            if (confirm('Are you sure you want to delete this?')) {
-                const form = event.target.closest('.delete-form');
-                form.submit();
-            }
-        });
-    });
-    function redirectToGuestInfo(guestId) {
-        window.location.href = '/guests/guestInfo?guestId=' + guestId;
-    }
-    function redirectToGuestForm(roomId) {
-        window.location.href = '/guests/guestForm?roomId=' + roomId;
-    }
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2"></script>
 <script src="https://unpkg.com/@popperjs/core@2"></script>

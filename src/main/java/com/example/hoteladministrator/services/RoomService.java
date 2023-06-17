@@ -1,8 +1,9 @@
 package com.example.hoteladministrator.services;
 
-import com.example.hoteladministrator.entities.Guest;
+import com.example.hoteladministrator.entities.PayCheck;
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
+import com.example.hoteladministrator.repositories.PayCheckRepository;
 import com.example.hoteladministrator.repositories.RoomRepository;
 import com.example.hoteladministrator.repositories.RoomTypeRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomTypeRepository roomTypeRepository;
+    private final PayCheckRepository payCheckRepository;
 
     public Room getRoomById(long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);

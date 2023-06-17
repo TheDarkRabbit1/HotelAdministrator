@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,15 +29,19 @@ public class Room {
     @Column
     private Integer capacity;
 
-    @ManyToOne(optional = false) // Updated annotation
+    @ManyToOne(optional = false)
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
+
+    @Column(name = "is_booked", nullable = false)
+    private Boolean isBooked = false;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private Set<Guest> guests;
 
-    public boolean isEmpty() {
-        return guests.isEmpty();
-    }
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PayCheck> payChecks = new LinkedHashSet<>();
+
+
 }

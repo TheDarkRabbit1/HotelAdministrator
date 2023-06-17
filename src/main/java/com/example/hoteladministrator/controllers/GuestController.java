@@ -77,8 +77,9 @@ public class GuestController {
     }
     @PostMapping("/delete")
     public String deleteGuest(@RequestParam("guestId") Long guestId) {
+        long roomId = guestService.getGuestById(guestId).getRoom().getId();
         guestService.deleteGuestById(guestId);
-        return "redirect:/rooms";
+        return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
 
 }
