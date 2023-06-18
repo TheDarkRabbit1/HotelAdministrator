@@ -74,6 +74,8 @@ public class PayCheck {
         return totalPrice;
     }
     public boolean wasEarlyCheckedOut(){
+        if (this.getCheckOutDate()==null)
+            return false;
         return ChronoUnit.DAYS.between(arrivalDate,checkOutDate)<0;
     }
     public double getEarlyCheckOutPrice() {

@@ -33,8 +33,9 @@
         </p>
       </div><br>
       <div class="d-flex justify-content-left">
-        <button class="btn btn-secondary" th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + *{payCheck.room.id} + '\''">
-          Back To Room</button>
+        <button class="btn btn-secondary" onclick="history.back()">
+          Back
+        </button>
       </div>
     </div>
   </div>
