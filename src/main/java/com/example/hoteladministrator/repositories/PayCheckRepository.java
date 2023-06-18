@@ -15,7 +15,7 @@ public interface PayCheckRepository extends JpaRepository<PayCheck,Long> {
     @Override
     <S extends PayCheck> S save(S entity);
 
-    @Query("select p from PayCheck p where p.room.id = ?1 order by p.room.id desc")
+    @Query("select p from PayCheck p where p.room.id = ?1 order by p.room.id desc limit 1")
     Optional<PayCheck> getLastPayCheckByRoomId(long roomId);
 
 

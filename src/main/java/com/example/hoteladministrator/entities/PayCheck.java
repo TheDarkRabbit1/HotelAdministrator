@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
@@ -37,11 +38,54 @@ public class PayCheck {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    public String generatePro(){
-        StringBuilder stringBuilder = new StringBuilder();
+    public double getTotalPrice() {
+        double basePrice = room.getRoomType().getPricing();
+        int numberOfGuests = room.getGuests().size();
+        int days = (int) ChronoUnit.DAYS.between(arrivalDate, departureDate);
+        double totalPrice = basePrice * numberOfGuests * days;
 
-        return stringBuilder.toString();
+        if (numberOfGuests > 1) {
+            double discountPercentage = 0.01 * (numberOfGuests - 1);
+            double discountAmount = totalPrice * discountPercentage;
+            totalPrice -= discountAmount;
+        }
+        return totalPrice;
     }
+
+    public double getExtendedStayPrice() {
+        double basePrice = room.getRoomType().getPricing();
+        int numberOfGuests = room.getGuests().size();
+        int days = (int) ChronoUnit.DAYS.between(arrivalDate, departureDate);
+        double totalPrice = basePrice * numberOfGuests * days;
+
+        if (numberOfGuests > 1) {
+            double discountPercentage = 0.01 * (numberOfGuests - 1);
+            double discountAmount = totalPrice * discountPercentage;
+            totalPrice -= discountAmount;
+        }
+
+        if (extendedStayDate != null) {
+            int extendedStayDays = (int) ChronoUnit.DAYS.between(departureDate, extendedStayDate);
+            double extendedStayPricePerDay = room.getRoomType().getPricing();
+            double extendedStayTotalPrice = extendedStayPricePerDay * numberOfGuests * extendedStayDays;
+            totalPrice += extendedStayTotalPrice;
+        }
+
+        return totalPrice;
+    }
+    public boolean wasEarlyCheckedOut(){
+        return ChronoUnit.DAYS.between(arrivalDate,checkOutDate)<0;
+    }
+    public double getEarlyCheckOutPrice() {
+        int days = (int) ChronoUnit.DAYS.between(arrivalDate, departureDate);
+        double totalWithoutPenalty = days*room.getRoomType().getPricing();
+        double penaltyPercentage = 0.25;
+        double penaltyAmount = totalWithoutPenalty * penaltyPercentage;
+
+        return totalWithoutPenalty + (penaltyAmount * days);
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,4 +98,7 @@ public class PayCheck {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
+
 }

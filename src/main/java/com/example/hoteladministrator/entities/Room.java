@@ -1,5 +1,6 @@
 package com.example.hoteladministrator.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -41,7 +42,9 @@ public class Room {
     private Set<Guest> guests;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<PayCheck> payChecks = new LinkedHashSet<>();
+
 
 
 }

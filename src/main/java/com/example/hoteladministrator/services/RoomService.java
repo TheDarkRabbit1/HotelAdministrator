@@ -7,6 +7,7 @@ import com.example.hoteladministrator.entities.RoomType;
 import com.example.hoteladministrator.repositories.PayCheckRepository;
 import com.example.hoteladministrator.repositories.RoomRepository;
 import com.example.hoteladministrator.repositories.RoomTypeRepository;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -83,5 +84,24 @@ public class RoomService {
         payCheck.setGuestFullName(guest.getFirstName()+" "+guest.getLastName());
         payCheck.setPhoneNumber(guest.getPhoneNumber());
         payCheckRepository.save(payCheck);
+    }
+    public PayCheck getLastPayCheckByRoomId(long roomId){
+        Optional <PayCheck> payCheck = payCheckRepository.getLastPayCheckByRoomId(roomId);
+        if (payCheck.isEmpty()){
+            throw new RuntimeException("No Pay Check Was found for This room");
+        }
+        return payCheck.get();
+    }
+    public List<PayCheck> getPayCheckList(){
+        return payCheckRepository.findAll();
+    }
+
+    public void bookOutByRoomId(long roomId) {
+        getLastPayCheckByRoomId(roomId).setCheckOutDate(LocalDate.now());
+
+        Room room = getRoomById(roomId);
+        room.setIsBooked(false);
+        room.setGuests(null);
+        roomRepository.save(room);
     }
 }

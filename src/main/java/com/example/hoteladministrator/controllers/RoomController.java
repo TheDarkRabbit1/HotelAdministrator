@@ -2,6 +2,8 @@ package com.example.hoteladministrator.controllers;
 
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
+import com.example.hoteladministrator.repositories.GuestRepository;
+import com.example.hoteladministrator.services.GuestService;
 import com.example.hoteladministrator.services.RoomService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomController {
     private final RoomService roomService;
-    //todo: should be some but with guest and paychecks, not sure
+    private final GuestService guestService;
+
     @GetMapping
     public String showRooms(Model model) {
         List<Room> rooms = roomService.getRoomList();
@@ -52,8 +55,8 @@ public class RoomController {
         model.addAttribute("room", new Room());
         return "room/roomForm";
     }
-    @GetMapping("/extendBooking")
-    public String extendRoomBooking(@RequestParam("roomId") long roomId, @RequestParam int days){
+    @PostMapping("/extendBooking")
+    public String extendRoomBooking(@RequestParam("roomId") long roomId, @RequestParam("extendBooking") int days){
         roomService.extendBooking(roomId, days);
         return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
@@ -68,6 +71,14 @@ public class RoomController {
         }
         roomService.addRoom(room, roomTypeId);
         return "redirect:/rooms";
+    }
+    @GetMapping("/bookOut")
+    public String bookOut(@RequestParam("roomId") long roomId){
+        roomService.getRoomById(roomId)
+                .getGuests()
+                .forEach(guest -> guestService.deleteGuestById(guest.getId()));
+        roomService.bookOutByRoomId(roomId);
+        return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
 
     @GetMapping("/delete")

@@ -19,6 +19,7 @@ public interface GuestRepository extends JpaRepository<Guest,Long> {
     @Query("update Guest g set g.firstName = ?1, g.lastName = ?2, g.phoneNumber = ?3, g.dateOfBirth = ?4, g.arrivalDate = ?5, g.departureDate = ?6 where g.id = ?7")
     void updateGuest(String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, LocalDate arrivalDate, LocalDate departureDate, Long guestId);
 
+    void deleteAllByRoomId(Long room_id);
     @Override
     List<Guest> findAll();
     @Override
