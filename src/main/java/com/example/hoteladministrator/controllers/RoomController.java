@@ -2,7 +2,6 @@ package com.example.hoteladministrator.controllers;
 
 import com.example.hoteladministrator.entities.Room;
 import com.example.hoteladministrator.entities.RoomType;
-import com.example.hoteladministrator.repositories.GuestRepository;
 import com.example.hoteladministrator.services.GuestService;
 import com.example.hoteladministrator.services.RoomService;
 import jakarta.validation.Valid;
@@ -81,7 +80,7 @@ public class RoomController {
         return "redirect:/rooms/roomInfo?roomId="+roomId;
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteRoom(@RequestParam("roomId") Long roomId) {
         roomService.deleteRoomById(roomId);
         return "redirect:/rooms";

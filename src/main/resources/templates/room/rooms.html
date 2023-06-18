@@ -15,7 +15,7 @@
 
             // Filter the list of rooms based on the search field and checkbox values
             var filteredRooms = rooms.filter(function(room) {
-                return (!searchId || room.id == searchId) && (!notBooked || !room.booked);
+                return (!searchId || room.id == searchId) && (!notBooked || !room.isBooked);
             });
 
             // Update the table with the filtered list of rooms
@@ -23,8 +23,10 @@
             tableBody.innerHTML = "";
             for (var i = 0; i < filteredRooms.length; i++) {
                 var room = filteredRooms[i];
+                var capacity = room.guests.length + '/' + room.capacity;
+                var roomStatus = room.isBooked ? 'Booked' : 'Available';
                 var row = document.createElement("tr");
-                row.innerHTML = "<td>" + room.id + "</td><td>" + room.capacity + "</td><td>" + room.roomClass + "</td><td><button onclick='window.location.href=\"/rooms/roomInfo?" + room.id + "\"' class='btn btn-primary'>Edit</button></td>";
+                row.innerHTML = "<td>" + room.id + "</td><td>" + capacity + "</td><td>" + room.roomType.typeName + "</td><td>" + roomStatus + "</td><td><button onclick='window.location.href=\"/rooms/roomInfo?roomId=" + room.id + "\"' class='btn btn-primary'>Edit</button></td>";
                 tableBody.appendChild(row);
             }
         }
@@ -35,7 +37,7 @@
     <h1>Rooms</h1>
     <div class="mb-3">
         <a th:href="@{/rooms/roomForm}" class="btn btn-primary">Add Room</a>
-        <a th:href="@{/}" class="btn btn-primary">Go To Home Page</a>
+        <a th:href="@{/}" class="btn btn-secondary">Go To Home Page</a>
     </div>
     <div class="row mb-3">
         <div class="col">
@@ -57,15 +59,23 @@
             <th>Id</th>
             <th>Capacity</th>
             <th>Room Class</th>
+            <th>Status</th>
             <th>Check the room</th>
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="room : ${rooms}">
             <td th:text="${room.id}"></td>
-            <td th:text="${room.capacity}"></td>
+            <td th:text="${room.guests.size()+'/'+room.capacity}"></td>
             <td th:text="${room.roomType.typeName}"></td>
-            <td><button th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + ${room.id} + '\''" class="btn btn-primary">Edit</button></td>
+            <td>
+                <span th:if="${room.isBooked}">Booked</span>
+                <span th:unless="${room.isBooked}">Available</span>
+            </td>
+            <td>
+                <button th:onclick="'window.location.href=\'/rooms/roomInfo?roomId=' + ${room.id} + '\''" class="btn btn-primary">Edit</button>
+            </td>
         </tr>
         </tbody>
     </table>
