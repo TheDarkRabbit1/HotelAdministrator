@@ -7,6 +7,7 @@ import com.example.hoteladministrator.entities.RoomType;
 import com.example.hoteladministrator.repositories.PayCheckRepository;
 import com.example.hoteladministrator.repositories.RoomRepository;
 import com.example.hoteladministrator.repositories.RoomTypeRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class RoomService {
     }
 
     public List<RoomType> getRoomTypes() {
-        return roomTypeRepository.findAll();
+        return roomTypeRepository.findAll().stream().sorted(Comparator.comparing(RoomType::getId)).toList();
     }
 
     public RoomType getRoomTypeById(long id){
@@ -93,7 +94,7 @@ public class RoomService {
         return payCheck.get();
     }
     public List<PayCheck> getPayCheckList(){
-        return payCheckRepository.findAll();
+        return payCheckRepository.findAll().stream().sorted(Comparator.comparing(PayCheck::getId)).toList();
     }
 
     public void bookOutByRoomId(long roomId) {
@@ -103,5 +104,26 @@ public class RoomService {
         room.setIsBooked(false);
         room.setGuests(null);
         roomRepository.save(room);
+    }
+    @PostConstruct
+    private void addBasicRoomTypes(){
+        if(roomTypeRepository.findAll().isEmpty()){
+            RoomType standard = new RoomType();
+            standard.setTypeName("Standard");
+            standard.setPricing(100.0);
+            roomTypeRepository.save(standard);
+            RoomType deluxe = new RoomType();
+            deluxe.setTypeName("Deluxe");
+            deluxe.setPricing(150.0);
+            roomTypeRepository.save(deluxe);
+            RoomType suite = new RoomType();
+            suite.setTypeName("Suite");
+            suite.setPricing(300.0);
+            roomTypeRepository.save(suite);
+            RoomType psuite = new RoomType();
+            psuite.setTypeName("Presidential Suite");
+            psuite.setPricing(400.0);
+            roomTypeRepository.save(psuite);
+        }
     }
 }
